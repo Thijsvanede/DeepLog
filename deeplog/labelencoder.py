@@ -83,23 +83,3 @@ class LabelEncoder(object):
         inverse_encoding = {v: k for k, v in self.encoding.items()}
         # Decode labels and return
         return np.asarray([inverse_encoding.get(x) for x in y])
-
-
-if __name__ == "__main__":
-    le = LabelEncoder(update=True)
-    a = np.asarray([2, 3, 3, 4, 5, 5])
-    b = np.asarray([0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0])
-
-    print("                  A :", a)
-    print("                  B :", b)
-    print()
-    print("    fit_transform(A):", le.fit_transform(a))
-    print("        transform(A):", le.transform(a))
-    print("        transform(B):", le.transform(b))
-    print("    fit_transform(B):", le.fit_transform(b))
-    print("        transform(A):", le.transform(a))
-    print("    fit_transform(A):", le.fit_transform(a))
-    print("        transform(B):", le.transform(b))
-    print()
-    print("inverse_transform(A):", le.inverse_transform(le.transform(a)))
-    print("inverse_transform(B):", le.inverse_transform(le.transform(b)))
