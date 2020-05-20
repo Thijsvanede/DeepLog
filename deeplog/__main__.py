@@ -5,7 +5,7 @@ from   torch.utils.data import DataLoader, TensorDataset
 from deeplog      import DeepLog
 from labelencoder import LabelEncoder
 from reader       import Reader
-from utils        import TextHelpFormatter
+from argformat    import StructuredFormatter
 
 if __name__ == "__main__":
     ########################################################################
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # Parse arguments
     parser = argparse.ArgumentParser(
         description="DeepLog: anomaly detection using deep learning.",
-        formatter_class=TextHelpFormatter
+        formatter_class=StructuredFormatter
     )
 
     # Add arguments
