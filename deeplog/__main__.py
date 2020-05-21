@@ -29,6 +29,7 @@ if __name__ == "__main__":
     parse_group_deeplog.add_argument('-l', '--layers'    , type=int, default=  2, help="number of layers used by DeepLog")
     parse_group_deeplog.add_argument('-o', '--output'    , type=int, default=  0, help="required output shape")
     parse_group_deeplog.add_argument('-w', '--window'    , type=int, default= 10, help="window size used by DeepLog")
+    parse_group_deeplog.add_argument('-t', '--top'       , type=int, default=1  , help='accept any of the TOP predictions')
 
     # Add input/output arguments
     parse_group_io = parser.add_argument_group("Optional I/O parameters")
@@ -94,13 +95,25 @@ if __name__ == "__main__":
     # Set device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # Hyperparameters - TODO remove
-    input_size = 1
+    input_size = 300
     # Create DeepLog instance
     deeplog = DeepLog(input_size, args.hidden_dim, output_size, args.layers, args.window).to(device)
 
+    X_train = X_train.to(torch.int64)
+    y_train = y_train.to(torch.int64)
+    X_test  = X_test .to(torch.int64)
+    y_test  = y_test .to(torch.int64)
+
+    print(X_train.shape)
+    print(X_test .shape)
+
+    import torch.nn as nn
+    import torch.optim as optim
+
     # Train from data
     if args.train:
-        deeplog.train(data, epochs=args.epochs, verbose=True)
+        # deeplog.fit(X_train, y_train, epochs=args.epochs, verbose=True, criterion=nn.CrossEntropyLoss, optimizer=optim.Adam)
+        deeplog.fit(X_train, y_train, epochs=args.epochs, verbose=True, criterion=nn.CrossEntropyLoss, optimizer=optim.SGD)
     # Load pretrained model
     elif args.load:
         deeplog = deeplog.load(args.load)
@@ -112,4 +125,16 @@ if __name__ == "__main__":
     #                           Predict DeepLog                            #
     ########################################################################
 
-    deeplog.predict(X_test, y_test, 5)
+    y_pred, confidence = deeplog.predict(X_test, y_test, args.top)
+
+    # Initialise predictions
+    y_pred_top = y_pred[:, 0].clone()
+    # Compute top TOP predictions
+    for top in range(1, args.top):
+        # Get mask
+        mask = y_test == y_pred[:, top]
+        # Set top values
+        y_pred_top[mask] = y_test[mask]
+
+    from sklearn.metrics import classification_report
+    print(classification_report(y_test.cpu(), y_pred_top.cpu(), digits=4))
