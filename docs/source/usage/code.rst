@@ -31,6 +31,7 @@ First we import the necessary torch modules and different LSTMs that we want to 
   # import Tiresias and PreprocessLoader
   from deeplog import DeepLog
   from deeplog.preprocessing import PreprocessLoader
+  import torch.nn as nn
 
   ##############################################################################
   #                                 Load data                                  #
@@ -49,16 +50,17 @@ First we import the necessary torch modules and different LSTMs that we want to 
   )
 
   # Get short handles
-  X_train = data.get('threat_name').get('train').get('X').to(device)
-  y_train = data.get('threat_name').get('train').get('y').to(device).reshape(-1)
-  X_test  = data.get('threat_name').get('test' ).get('X').to(device)
-  y_test  = data.get('threat_name').get('test' ).get('y').to(device).reshape(-1)
+  device = 'cpu' # Optionally set to 'cuda'
+  X_train = data.get(<event_key>).get('train').get('X').to(device)
+  y_train = data.get(<event_key>).get('train').get('y').to(device).reshape(-1)
+  X_test  = data.get(<event_key>).get('test' ).get('X').to(device)
+  y_test  = data.get(<event_key>).get('test' ).get('y').to(device).reshape(-1)
 
   ##############################################################################
   #                                  Tiresias                                  #
   ##############################################################################
-  deeplog = DeepLog(args.input, args.hidden, args.input).to(device)
+  deeplog = DeepLog(<dim_input>, <dim_hidden>, <dim_output>).to(device)
   # Train deeplog
-  deeplog.fit(X_train, y_train, epochs=args.epochs, batch_size=args.batch_size)
+  deeplog.fit(X_train, y_train, epochs=10, batch_size=128, criterion=nn.CrossEntropyLoss)
   # Predict using deeplog
-  y_pred, confidence = deeplog.predict(X_test, k=args.top)
+  y_pred, confidence = deeplog.predict(X_test, k=5)

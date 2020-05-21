@@ -28,7 +28,7 @@ The full command line usage is given in its :code:`help` page:
   -m, --max        MAX         maximum number of items to read from input (default =         inf)
   -w, --window     WINDOW      length of input sequence                   (default =          10)
 
-  Tiresias parameters:
+  DeepLog parameters:
   --hidden         HIDDEN      hidden dimension                           (default =          64)
   -i, --input      INPUT       input  dimension                           (default =         300)
   -l, --layers     LAYERS      number of lstm layers to use               (default =           2)
