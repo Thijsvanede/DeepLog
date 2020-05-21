@@ -55,7 +55,7 @@ class DeepLog(Module):
 
             """
         # One hot encode X
-        X = F.one_hot(X, self.input_size).to(torch.float)
+        X = F.one_hot(X.to(torch.int64), self.input_size).to(torch.float)
 
         # Set initial hidden states
         hidden = self._get_initial_state(X)
