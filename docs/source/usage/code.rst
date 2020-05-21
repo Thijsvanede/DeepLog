@@ -30,7 +30,7 @@ First we import the necessary torch modules and different LSTMs that we want to 
 
   # import Tiresias and PreprocessLoader
   from deeplog import DeepLog
-  from deeplog.processing import PreprocessLoader
+  from deeplog.preprocessing import PreprocessLoader
 
   ##############################################################################
   #                                 Load data                                  #

@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
-from variable_data_loader import VariableDataLoader
+from deeplog.variable_data_loader import VariableDataLoader
 
 class Module(nn.Module):
     """Extention of nn.Module that adds fit and predict methods
