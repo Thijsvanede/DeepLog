@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from module import Module
+from torchtrain import Module
 
 class DeepLog(Module):
 

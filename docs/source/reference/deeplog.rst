@@ -3,10 +3,11 @@
 DeepLog
 =======
 
-The DeepLog class is an extension of the :ref:`Module` object.
+The DeepLog class uses the `torch-train`_ library for training and prediction.
 This class implements the neural network as described in the paper `Deeplog: Anomaly detection and diagnosis from system logs through deep learning`_.
 
 .. _`Deeplog: Anomaly detection and diagnosis from system logs through deep learning`: https://doi.org/10.1145/3133956.3134015
+.. _`torch-train`: https://github.com/Thijsvanede/torch-train
 
 
 .. autoclass:: deeplog.DeepLog
@@ -27,6 +28,6 @@ Predict
 ^^^^^^^
 
 The regular network gives a probability distribution over all possible output values.
-However, DeepLog outputs the `k` most likely outputs, therefore it overwrites the :py:meth:`predict` method of the :ref:`Module` class.
+However, DeepLog outputs the `k` most likely outputs, therefore it overwrites the :py:meth:`predict` method of the :py:class:`Module` class from `torch-train`_.
 
 .. automethod:: deeplog.DeepLog.predict
