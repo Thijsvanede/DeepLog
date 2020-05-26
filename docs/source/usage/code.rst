@@ -61,6 +61,6 @@ First we import the necessary torch modules and different LSTMs that we want to 
   ##############################################################################
   deeplog = DeepLog(<dim_input>, <dim_hidden>, <dim_output>).to(device)
   # Train deeplog
-  deeplog.fit(X_train, y_train, epochs=10, batch_size=128, criterion=nn.CrossEntropyLoss)
+  deeplog.fit(X_train, y_train, epochs=10, batch_size=128, criterion=nn.CrossEntropyLoss())
   # Predict using deeplog
   y_pred, confidence = deeplog.predict(X_test, k=5)
