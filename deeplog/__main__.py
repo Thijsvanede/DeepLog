@@ -98,7 +98,7 @@ if __name__ == "__main__":
         epochs        = args.epochs,
         batch_size    = args.batch_size,
         learning_rate = 0.01,
-        criterion     = nn.CrossEntropyLoss,
+        criterion     = nn.CrossEntropyLoss(),
         optimizer     = optim.SGD,
         variable      = False,
         verbose       = True,
