@@ -7,7 +7,7 @@ The DeepLog class uses the `torch-train`_ library for training and prediction.
 This class implements the neural network as described in the paper `Deeplog: Anomaly detection and diagnosis from system logs through deep learning`_.
 
 .. _`Deeplog: Anomaly detection and diagnosis from system logs through deep learning`: https://doi.org/10.1145/3133956.3134015
-.. _`torch-train`: https://github.com/Thijsvanede/torch-train
+.. _`torch-train`: https://github.com/anonymized/torch-train
 
 
 .. autoclass:: deeplog.DeepLog

@@ -8,4 +8,4 @@ In addition, we provide automatic methods to train and predict events given prev
 This follows a ``scikit-learn`` approach with :py:meth:`fit`, :py:meth:`predict` and :py:meth:`fit_predict` methods.
 We refer to its documentation for a detailed description.
 
-.. _`torch-train`: https://github.com/Thijsvanede/torch-train
+.. _`torch-train`: https://github.com/anonymized/torch-train

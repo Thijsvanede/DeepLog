@@ -2,6 +2,10 @@ Installation
 ============
 The most straigtforward way of installing DeepLog is via pip
 
+.. note::
+
+  Installation via pip is currently only supported from the command line ``pip install -e <path/to/directory/containing/setup.py>``
+
 .. code::
 
   pip install deeplog
@@ -9,7 +13,7 @@ The most straigtforward way of installing DeepLog is via pip
 If you wish to stay up to date with the latest development version, you can instead download the `source code`_.
 In this case, make sure that you have all the required `dependencies`_ installed.
 
-.. _source code: https://github.com/Thijsvanede/DeepLog
+.. _source code: https://github.com/anonymized/DeepLog
 
 .. _dependencies:
 
@@ -17,7 +21,7 @@ Dependencies
 ^^^^^^^^^^^^
 DeepLog requires the following python packages to be installed:
 
-- argformat: https://github.com/Thijsvanede/argformat
+- argformat: https://github.com/anonymized/argformat
 - numpy: https://numpy.org/
 - scikit-learn: https://scikit-learn.org/
 - pytorch: https://pytorch.org/

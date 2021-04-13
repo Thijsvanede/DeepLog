@@ -5,6 +5,10 @@ DeepLog provides a pytorch implementation of `Deeplog: Anomaly detection and dia
 This code was implemented as part of the TODO paper.
 We ask people to cite both works when using the software for academic research papers, see :ref:`Citing` for more information.
 
+.. note::
+
+   This is an anonymized version of the documentation and therefore, some links may not work.
+
 .. _`Deeplog: Anomaly detection and diagnosis from system logs through deep learning`: https://doi.org/10.1145/3133956.3134015
 
 .. _`Cite`: citing
