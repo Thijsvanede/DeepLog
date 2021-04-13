@@ -11,7 +11,7 @@ setuptools.setup(
     description="Pytorch implementation of Deeplog: Anomaly detection and diagnosis from system logs through deep learning",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Thijsvanede/DeepLog",
+    url="https://github.com/anonymized/DeepLog",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
