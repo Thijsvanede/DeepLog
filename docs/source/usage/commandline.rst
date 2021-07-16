@@ -5,41 +5,39 @@ The :code:`__main__.py` file in the :code:`deeplog` module implements this comma
 The command line tool provides a quick and easy interface to predict sequences from :code:`.csv` files.
 The full command line usage is given in its :code:`help` page:
 
-.. Note::
-
-  Note that when handling very large inputs, DeepLog can be slow.
-  In order to more quickly test on smaller inputs we provide the ``--max`` flag, which specifies the maximum amount of samples to read from the input file.
-  E.g., to use only the first 100k samples, one may invoke DeepLog using ``--max 1e5`` flag.
-
 .. code:: text
 
-  usage: deeplog.py [-h] [-f FIELD] [-m MAX] [-w WINDOW] [--hidden HIDDEN] [-i INPUT] [-l LAYERS] [-k TOP]
-                  [-b BATCH_SIZE] [-d DEVICE] [-e EPOCHS] [-r] [--ratio RATIO]
-                  file
+  usage: deeplog.py [-h] [--csv CSV] [--txt TXT] [--length LENGTH] [--timeout TIMEOUT] [--hidden HIDDEN]
+                    [-i INPUT] [-l LAYERS] [-k TOP] [--save SAVE] [--load LOAD] [-b BATCH_SIZE]
+                    [-d DEVICE] [-e EPOCHS]
+                    {train,predict}
 
-  DeepLog: anomaly detection using deep learning.
+  Deeplog: Anomaly detection and diagnosis from system logs through deep learning
+
+  positional arguments:
+    {train,predict}              mode in which to run DeepLog
 
   optional arguments:
-  -h, --help                   show this help message and exit
+    -h, --help                   show this help message and exit
 
   Input parameters:
-  file                         file to read as input
-  -f, --field      FIELD       FIELD to extract from input FILE           (default = threat_name)
-  -m, --max        MAX         maximum number of items to read from input (default =         inf)
-  -w, --window     WINDOW      length of input sequence                   (default =          10)
+    --csv       CSV              CSV events file to process
+    --txt       TXT              TXT events file to process
+    --length    LENGTH           sequence LENGTH                          (default =   20)
+    --timeout   TIMEOUT          sequence TIMEOUT (seconds)               (default =  inf)
 
   DeepLog parameters:
-  --hidden         HIDDEN      hidden dimension                           (default =          64)
-  -i, --input      INPUT       input  dimension                           (default =         300)
-  -l, --layers     LAYERS      number of lstm layers to use               (default =           2)
-  -k, --top        TOP         accept any of the TOP predictions          (default =           1)
+    --hidden    HIDDEN           hidden dimension                         (default =   64)
+    -i, --input INPUT            input  dimension                         (default =  300)
+    -l, --layers LAYERS          number of lstm layers to use             (default =    2)
+    -k, --top   TOP              accept any of the TOP predictions        (default =    1)
+    --save      SAVE             save DeepLog to   specified file
+    --load      LOAD             load DeepLog from specified file
 
   Training parameters:
-  -b, --batch-size BATCH_SIZE  batch size                                 (default =         128)
-  -d, --device     DEVICE      train using given device (cpu|cuda|auto)   (default =        auto)
-  -e, --epochs     EPOCHS      number of epochs to train with             (default =          10)
-  -r, --random                 train with random selection
-  --ratio          RATIO       proportion of data to use for training     (default =         0.5)
+    -b, --batch-size BATCH_SIZE  batch size                               (default =  128)
+    -d, --device DEVICE          train using given device (cpu|cuda|auto) (default = auto)
+    -e, --epochs EPOCHS          number of epochs to train with           (default =   10)
 
 Examples
 ^^^^^^^^
@@ -47,4 +45,5 @@ Use first half of ``<data.csv>`` to train DeepLog and use second half of ``<data
 
 .. code::
 
-  python3 -m deeplog <data.csv> --ratio 0.5
+  python3 -m deeplog train   --csv <data.csv> --save deeplog.save # Training
+  python3 -m deeplog predict --csv <data.csv> --load deeplog.save # Predicting

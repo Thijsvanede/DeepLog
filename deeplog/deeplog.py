@@ -83,6 +83,9 @@ class DeepLog(Module):
                 Input of sequences, these will be one-hot encoded to an array of
                 shape=(n_samples, seq_len, input_size)
 
+            y : Ignored
+                Ignored
+
             k : int, default=1
                 Number of output items to generate
 
@@ -113,28 +116,53 @@ class DeepLog(Module):
     #                             I/O methods                              #
     ########################################################################
 
-    def save(self, path):
-        """Save trained model to path
+    def save(self, outfile):
+        """Save model to output file.
 
             Parameters
             ----------
-            path : string
-                Path to output trained model
+            outfile : string
+                File to output model.
             """
-        torch.save(self.state_dict(), path)
+        # Save to output file
+        torch.save(self.state_dict(), outfile)
 
-    def load(self, path):
-        """Load trained model from path
+    @classmethod
+    def load(cls, infile, device=None):
+        """Load model from input file.
 
             Parameters
             ----------
-            path : string
-                Path from which to load model.
+            infile : string
+                File from which to load model.
             """
-        # Load from path
-        self.load_state_dict(torch.load(path))
-        # Return self
-        return self
+        # Load state dictionary
+        state_dict = torch.load(infile, map_location=device)
+
+        print(state_dict.keys())
+
+        # Get input variables from state_dict
+        input_size  = state_dict.get('lstm.weight_ih_l0').shape[1]
+        hidden_size = state_dict.get('lstm.weight_hh_l0').shape[1]
+        output_size = input_size
+        num_layers  = (len(state_dict) - 2) // 4
+
+        # Create ContextBuilder
+        result = cls(
+            input_size  = input_size,
+            hidden_size = hidden_size,
+            output_size = output_size,
+            num_layers  = num_layers,
+        )
+
+        # Cast to device if necessary
+        if device is not None: result = result.to(device)
+
+        # Set trained parameters
+        result.load_state_dict(state_dict)
+
+        # Return result
+        return result
 
     ########################################################################
     #                         Auxiliary functions                          #

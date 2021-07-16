@@ -23,44 +23,56 @@ For example, the following code imports the DeepLog neural network as found in t
 Working example
 ^^^^^^^^^^^^^^^
 
-In this example, we import all different LSTM implementations and use it to predict the next item in a sequence.
-First we import the necessary torch modules and different LSTMs that we want to use.
+In this example, we load data from either a ``.csv`` or ``.txt`` file and use that data to train and predict with DeepLog.
 
 .. code:: python
 
-  # import Tiresias and PreprocessLoader
-  from deeplog import DeepLog
-  from deeplog.preprocessing import PreprocessLoader
-  import torch.nn as nn
+  # import DeepLog and Preprocessor
+  from deeplog              import DeepLog
+  from deeplog.preprocessor import Preprocessor
 
   ##############################################################################
   #                                 Load data                                  #
   ##############################################################################
-  # Create loader for preprocessed data
-  loader = PreprocessLoader()
-  # Load data
-  data, encodings = loader.load(
-      <infile>,
-      dim_in      = 20,
-      dim_out     = 1,
-      train_ratio = 0.5,
-      key         = lambda x: (x.get(<groupby_key>),),
-      extract     = [<event_key>],
-      random      = False
+
+  # Create preprocessor for loading data
+  preprocessor = Preprocessor(
+      length  = 20,           # Extract sequences of 20 items
+      timeout = float('inf'), # Do not include a maximum allowed time between events
   )
 
-  # Get short handles
-  device = 'cpu' # Optionally set to 'cuda'
-  X_train = data.get(<event_key>).get('train').get('X').to(device)
-  y_train = data.get(<event_key>).get('train').get('y').to(device).reshape(-1)
-  X_test  = data.get(<event_key>).get('test' ).get('X').to(device)
-  y_test  = data.get(<event_key>).get('test' ).get('y').to(device).reshape(-1)
+  # Load data from csv file
+  y, X, label, mapping = preprocessor.csv("<path/to/file.csv>")
+  # Load data from txt file
+  y, X, label, mapping = preprocessor.txt("<path/to/file.txt>")
 
   ##############################################################################
-  #                                  Tiresias                                  #
+  #                                  DeepLog                                  #
   ##############################################################################
-  deeplog = DeepLog(<dim_input>, <dim_hidden>, <dim_output>).to(device)
+
+  # Create DeepLog object
+  deeplog = DeepLog(
+      input_size  = 300, # Number of different events to expect
+      hidden_size = 64 , # Hidden dimension, we suggest 64
+      output_size = 300, # Number of different events to expect
+  )
+
+  # Optionally cast data and DeepLog to cuda, if available
+  deeplog = deeplog.to("cuda")
+  X       = X      .to("cuda")
+  y       = y      .to("cuda")
+
   # Train deeplog
-  deeplog.fit(X_train, y_train, epochs=10, batch_size=128, criterion=nn.CrossEntropyLoss())
+  deeplog.fit(
+      X          = X,
+      y          = y,
+      epochs     = 10,
+      batch_size = 128,
+  )
+
   # Predict using deeplog
-  y_pred, confidence = deeplog.predict(X_test, k=5)
+  y_pred, confidence = deeplog.predict(
+      X = X,
+      y = y,
+      k = 3,
+  )
