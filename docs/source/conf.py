@@ -57,4 +57,4 @@ html_theme = 'sphinx_rtd_theme'
 master_doc = 'index'
 
 # -- Mock modules ------------------------------------------------------------
-autodoc_mock_imports = ['numpy', 'torch', 'scikit-learn', 'pandas']
+autodoc_mock_imports = ['numpy', 'pandas', 'torch', 'tqdm', 'scikit-learn']
