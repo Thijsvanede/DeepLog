@@ -42,9 +42,9 @@ In this example, we load data from either a ``.csv`` or ``.txt`` file and use th
   )
 
   # Load data from csv file
-  y, X, label, mapping = preprocessor.csv("<path/to/file.csv>")
+  X, y, label, mapping = preprocessor.csv("<path/to/file.csv>")
   # Load data from txt file
-  y, X, label, mapping = preprocessor.txt("<path/to/file.txt>")
+  X, y, label, mapping = preprocessor.txt("<path/to/file.txt>")
 
   ##############################################################################
   #                                  DeepLog                                  #

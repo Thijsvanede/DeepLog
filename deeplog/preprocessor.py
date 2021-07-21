@@ -56,11 +56,11 @@ class Preprocessor(object):
 
             Returns
             -------
-            events : torch.Tensor of shape=(n_samples,)
-                Events in data.
-
             context : torch.Tensor of shape=(n_samples, context_length)
                 Context events for each event in events.
+
+            events : torch.Tensor of shape=(n_samples,)
+                Events in data.
 
             labels : torch.Tensor of shape=(n_samples,)
                 Labels will be None if no labels parameter is given, and if data
@@ -195,7 +195,7 @@ class Preprocessor(object):
         ################################################################
 
         # Return result
-        return events, context, labels, mapping
+        return context, events, labels, mapping
 
 
     ########################################################################

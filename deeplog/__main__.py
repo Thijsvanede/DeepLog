@@ -72,10 +72,10 @@ if __name__ == "__main__":
         raise ValueError("Please specify EITHER --csv OR --txt.")
     if args.csv:
         # Load csv file
-        y, X, label, mapping = preprocessor.csv(args.csv)
+        X, y, label, mapping = preprocessor.csv(args.csv)
     elif args.txt:
         # Load txt file
-        y, X, label, mapping = preprocessor.txt(args.txt)
+        X, y, label, mapping = preprocessor.txt(args.txt)
 
     X = X.to(args.device)
     y = y.to(args.device)
