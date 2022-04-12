@@ -15,10 +15,10 @@ preprocessor = Preprocessor(
 # Load data from csv file
 X, y, label, mapping = preprocessor.csv("<path/to/file.csv>")
 # Load data from txt file
-X, y, label, mapping = preprocessor.txt("<path/to/file.txt>")
+X, y, label, mapping = preprocessor.text("<path/to/file.txt>")
 
 ##############################################################################
-#                                  DeepLog                                  #
+#                                  DeepLog                                   #
 ##############################################################################
 
 # Create DeepLog object
@@ -44,6 +44,5 @@ deeplog.fit(
 # Predict using deeplog
 y_pred, confidence = deeplog.predict(
     X = X,
-    y = y,
     k = 3,
 )
