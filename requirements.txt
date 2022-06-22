@@ -1,4 +1,4 @@
-numpy==1.18.1
+numpy==1.22.0
 torch_train==0.0.1
 torch==1.4.0
 argformat==0.0.1
