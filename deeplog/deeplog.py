@@ -34,8 +34,9 @@ class DeepLog(Module):
         self.num_layers  = num_layers
 
         # Initialise model layers
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
-        self.out  = nn.Linear(hidden_size, output_size)
+        self.lstm    = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.out     = nn.Linear(hidden_size, output_size)
+        self.softmax = nn.LogSoftmax(dim=-1)
 
     ########################################################################
     #                       Forward through network                        #
@@ -65,6 +66,8 @@ class DeepLog(Module):
         out, hidden = self.lstm(X, (hidden, state))
         # Perform output layer
         out = self.out(out[:, -1, :])
+        # Create probability
+        out = self.softmax(out)
 
         # Return result
         return out
