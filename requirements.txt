@@ -2,4 +2,4 @@ numpy==1.22.0
 torch_train==0.0.1
 torch==1.4.0
 argformat==0.0.1
-scikit_learn==0.23.1
+scikit_learn==1.5.0
