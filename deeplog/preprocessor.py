@@ -38,7 +38,7 @@ class Preprocessor(object):
     #                      General data preprocessing                      #
     ########################################################################
 
-    def sequence(self, data, labels=None, verbose=False):
+    def sequence(self, data, labels=None, verbose=False, mapping=None):
         """Transform pandas DataFrame into DeepCASE sequences.
 
             Parameters
@@ -53,6 +53,11 @@ class Preprocessor(object):
 
             verbose : boolean, default=False
                 If True, prints progress in transforming input to sequences.
+
+            mapping : dict(), default=None, optional
+                If mapping is provided, use given mapping. Any additional unique values
+                will be appended to the given mapping. NO_EVENT may be present in the 
+                provided mapping, but it is not required.
 
             Returns
             -------
@@ -105,17 +110,37 @@ class Preprocessor(object):
         ################################################################
 
         # Create mapping of events
-        mapping = {
-            i: event for i, event in enumerate(np.unique(data['event'].values))
-        }
+        if mapping is None:
+            mapping = {
+                i: event for i, event in enumerate(np.unique(data['event'].values))
+            }
+            
+            # Check that NO_EVENT is not in events
+            if self.NO_EVENT in mapping.values():
+                raise ValueError(
+                    "NO_EVENT ('{}') is also a valid Event ID".format(self.NO_EVENT)
+                )
+            
+            mapping[len(mapping)] = self.NO_EVENT
+        
+        # Use given mapping and add missing events
+        else:
+            mapping = mapping.copy()
+            difference = list(set(data['event'].values) - set(mapping.values()))
+            max_key = len(mapping)
+            for i, val in enumerate(difference):
+                mapping[i+max_key] = val
 
-        # Check that NO_EVENT is not in events
-        if self.NO_EVENT in mapping.values():
-            raise ValueError(
-                "NO_EVENT ('{}') is also a valid Event ID".format(self.NO_EVENT)
-            )
+            # Check that NO_EVENT is not in unseen events
+            if self.NO_EVENT in difference:
+                raise ValueError(
+                    "NO_EVENT ('{}') is also a valid Event ID".format(self.NO_EVENT)
+                )
+            
+            # Add NO_EVENT if it is not present in mapping
+            if self.NO_EVENT not in mapping.values():
+                mapping[len(mapping)] = self.NO_EVENT
 
-        mapping[len(mapping)] = self.NO_EVENT
         mapping_inverse = {v: k for k, v in mapping.items()}
 
         # Apply mapping
@@ -202,7 +227,7 @@ class Preprocessor(object):
     #                     Preprocess different formats                     #
     ########################################################################
 
-    def csv(self, path, nrows=None, labels=None, verbose=False):
+    def csv(self, path, nrows=None, labels=None, verbose=False, mapping=None):
         """Preprocess data from csv file.
 
             Note
@@ -228,6 +253,11 @@ class Preprocessor(object):
             verbose : boolean, default=False
                 If True, prints progress in transforming input to sequences.
 
+            mapping : dict(), default=None, optional
+                If mapping is provided, use given mapping. Any additional unique values
+                will be appended to the given mapping. NO_EVENT may be present in the 
+                provided mapping, but it is not required.
+
             Returns
             -------
             events : torch.Tensor of shape=(n_samples,)
@@ -244,10 +274,10 @@ class Preprocessor(object):
         data = pd.read_csv(path, nrows=nrows)
 
         # Transform to sequences and return
-        return self.sequence(data, labels=labels, verbose=verbose)
+        return self.sequence(data, labels=labels, verbose=verbose, mapping=mapping)
 
 
-    def json(self, path, labels=None, verbose=False):
+    def json(self, path, labels=None, verbose=False, mapping=None):
         """Preprocess data from json file.
 
             Note
@@ -267,6 +297,11 @@ class Preprocessor(object):
             verbose : boolean, default=False
                 If True, prints progress in transforming input to sequences.
 
+            mapping : dict(), default=None, optional
+                If mapping is provided, use given mapping. Any additional unique values
+                will be appended to the given mapping. NO_EVENT may be present in the 
+                provided mapping, but it is not required.
+
             Returns
             -------
             events : torch.Tensor of shape=(n_samples,)
@@ -282,7 +317,7 @@ class Preprocessor(object):
         raise NotImplementedError("Parsing '.json' not yet implemented.")
 
 
-    def ndjson(self, path, labels=None, verbose=False):
+    def ndjson(self, path, labels=None, verbose=False, mapping=None):
         """Preprocess data from ndjson file.
 
             Note
@@ -302,6 +337,11 @@ class Preprocessor(object):
             verbose : boolean, default=False
                 If True, prints progress in transforming input to sequences.
 
+            mapping : dict(), default=None, optional
+                If mapping is provided, use given mapping. Any additional unique values
+                will be appended to the given mapping. NO_EVENT may be present in the 
+                provided mapping, but it is not required.
+
             Returns
             -------
             events : torch.Tensor of shape=(n_samples,)
@@ -317,7 +357,7 @@ class Preprocessor(object):
         raise NotImplementedError("Parsing '.ndjson' not yet implemented.")
 
 
-    def text(self, path, nrows=None, labels=None, verbose=False):
+    def text(self, path, nrows=None, labels=None, verbose=False, mapping=None):
         """Preprocess data from text file.
 
             Note
@@ -341,6 +381,11 @@ class Preprocessor(object):
 
             verbose : boolean, default=False
                 If True, prints progress in transforming input to sequences.
+
+            mapping : dict(), default=None, optional
+                If mapping is provided, use given mapping. Any additional unique values
+                will be appended to the given mapping. NO_EVENT may be present in the 
+                provided mapping, but it is not required.
 
             Returns
             -------
@@ -382,7 +427,7 @@ class Preprocessor(object):
         })
 
         # Transform to sequences and return
-        return self.sequence(data, labels=labels, verbose=verbose)
+        return self.sequence(data, labels=labels, verbose=verbose, mapping=mapping)
 
 
 if __name__ == "__main__":
